@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'demo/price_slider.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Slid,
+      home: SliderPrice(),
     );
   }
 }
