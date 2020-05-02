@@ -95,10 +95,10 @@ class SliderPriceState extends State<SliderPrice> {
   Widget build(BuildContext context) {
 
     return Material(
-      color: Colors.transparent,
+      color: Colors.lightBlueAccent,
       child: Container(
         height: widget.rootHeight,
-        color: Colors.transparent,
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -115,7 +115,7 @@ class SliderPriceState extends State<SliderPrice> {
                 overflow: Overflow.visible,
                 children: <Widget>[
                   Positioned(
-                    bottom: 20,
+                    bottom: 25,
                     child: _lineBlock(context, widget.rootWidth),
                   ),
                   _leftImageBlock(context, widget.rootWidth),
@@ -148,6 +148,10 @@ class SliderPriceState extends State<SliderPrice> {
                 visible: isLeftDragging,
                 child: Text(_leftPrice,style: TextStyle(fontSize: 12,color: Colors.black),),
               ),
+              SizedBox(
+                width: 1,
+                height: widget.rootHeight*0.7,
+              ),
 
               GestureDetector(
                 child: _imageItem(leftImageKey),
@@ -172,8 +176,7 @@ class SliderPriceState extends State<SliderPrice> {
                   else {
                     leftImageMargin += details.delta.dx;
                     ///确保线宽不溢出
-                    leftBlackLineW = leftImageMargin - blockSize >= 0
-                        ? leftImageMargin : 2;
+                    leftBlackLineW = leftImageMargin+blockSize/2;
                   }
 
                   double _leftImageMarginFlag = leftImageMargin;
@@ -239,11 +242,6 @@ class SliderPriceState extends State<SliderPrice> {
                     color:!isLeftDragging ? Colors.black : Colors.white),),
               )
 
-//                Visibility(
-//                  visible:  ! isLeftDragging,
-//                  child: Text("$_leftPrice",style: TextStyle(fontSize: 12,color: Colors.black),),
-//                ),
-
             ],
           ),
 
@@ -272,6 +270,10 @@ class SliderPriceState extends State<SliderPrice> {
                 visible: isRightDragging,
                 child: Text(_rightPrice,style: TextStyle(fontSize: 12,color: Colors.black),),
               ),
+              SizedBox(
+                width: 1,
+                height: widget.rootHeight*0.7,
+              ),
 
               GestureDetector(
                 child: _imageItem(rightImageKey),
@@ -297,7 +299,7 @@ class SliderPriceState extends State<SliderPrice> {
                   else {
 
                     rightImageMargin = rightImageMargin - details.delta.dx;
-                    rightBlackLineW = rightImageMargin-blockSize >= 0 ? rightImageMargin : 2;
+                    rightBlackLineW = rightImageMargin+blockSize/2;
                   }
                   double _rightImageMarginFlag = rightImageMargin;
                   //print('拖拽结束');
@@ -406,7 +408,15 @@ class SliderPriceState extends State<SliderPrice> {
   // 滑块的image
   _imageItem(GlobalKey key){
     //return Icon(Icons.settings_applications,color: Colors.red,size: 30,);
-    return Icon(Icons.adjust,size: blockSize,key: key,);
+    return Container(
+      key: key,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(6)
+      ),
+      width: blockSize,
+      height: blockSize*0.7,
+    );
   }
 
 

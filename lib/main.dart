@@ -9,8 +9,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final double rootWidth = MediaQuery.of(context).size.width;
-    final double rootHeight = MediaQuery.of(context).size.height;
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -25,13 +24,28 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: SliderPrice(list: beanList,rootHeight: rootHeight,rootWidth: rootWidth,
-        leftSlidListener: (dragging,index){
-        debugPrint("left ------- $dragging ------- $index");
+      home: Builder(
+        builder: (ctx){
+          final size = MediaQuery.of(ctx).size;
+          final double rootWidth = size.width;
+          final double rootHeight = size.height;
+          return Container(
+            color: Colors.lightBlue,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SliderPrice(list: beanList,rootWidth: rootWidth,rootHeight: rootHeight * 0.4,
+                  leftSlidListener: (dragging,index){
+                    debugPrint("left ------- $dragging ------- $index");
+                  },
+                  rightSlidListener: (dragging,index){
+                    debugPrint("right ------- $dragging ------- $index");
+                  },)
+              ],
+            ),
+          );
         },
-        rightSlidListener: (dragging,index){
-          debugPrint("right ------- $dragging ------- $index");
-        },),
+      ),
     );
   }
 }
