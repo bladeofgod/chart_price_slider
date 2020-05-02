@@ -95,10 +95,11 @@ class SliderPriceState extends State<SliderPrice> {
   Widget build(BuildContext context) {
 
     return Material(
-      color: Colors.lightBlueAccent,
+      color: Colors.transparent,
       child: Container(
+        width: widget.rootWidth,
         height: widget.rootHeight,
-        color: Colors.white,
+        color: Colors.transparent,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -108,6 +109,7 @@ class SliderPriceState extends State<SliderPrice> {
             //SizedBox(height: 10,),
             /// x轴 +  左右滑块
             Container(
+              width: widget.rootWidth,
               height: widget.rootHeight,
               color: Colors.transparent,
               child: Stack(
@@ -193,7 +195,7 @@ class SliderPriceState extends State<SliderPrice> {
                   }
                   setState(() {});// 刷新UI
                   if(widget.leftSlidListener != null){
-                    widget.leftSlidListener(true,leftImageCurrentIndex,leftImageMargin);
+                    widget.leftSlidListener(true,leftImageCurrentIndex,leftImageKey);
                   }
                 },
                 ///拖拽结束
@@ -231,7 +233,7 @@ class SliderPriceState extends State<SliderPrice> {
                   setState(() {});// 刷新UI
 
                   if(widget.leftSlidListener != null){
-                    widget.leftSlidListener(false,leftImageCurrentIndex,leftImageMargin);
+                    widget.leftSlidListener(false,leftImageCurrentIndex,leftImageKey);
                   }
                 },
               ),
@@ -313,7 +315,7 @@ class SliderPriceState extends State<SliderPrice> {
                   }
                   setState(() {}); // 刷新UI
                   if(widget.rightSlidListener != null){
-                    widget.rightSlidListener(true,rightImageCurrentIndex,rightImageMargin);
+                    widget.rightSlidListener(true,rightImageCurrentIndex,rightImageKey);
                   }
                 },
                 onHorizontalDragEnd: (DragEndDetails details){
@@ -349,7 +351,7 @@ class SliderPriceState extends State<SliderPrice> {
                   setState(() {});// 刷新UI
 
                   if(widget.rightSlidListener != null){
-                    widget.rightSlidListener(false,rightImageCurrentIndex,rightImageMargin);
+                    widget.rightSlidListener(false,rightImageCurrentIndex,rightImageKey);
                   }
                 },
               ),

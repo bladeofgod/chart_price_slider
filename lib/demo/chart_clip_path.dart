@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 class ChartClipPath extends CustomClipper<Path>{
 
   Size slideBlockSize;
-  double leftBlockOffset,rightBlockOffset;///水平偏移
-  double chartHeight;
+  Offset leftBlockOffset,rightBlockOffset;
+
 
   ChartClipPath(this.slideBlockSize, this.leftBlockOffset,
-      this.rightBlockOffset,this.chartHeight);
+      this.rightBlockOffset);
 
-  final double ratio = 1.47;
+  final double ratio =0.5;
 
   @override
   Path getClip(Size size) {
-    //debugPrint("clip size : $size");
-    //debugPrint("clip inner var : size- $slideBlockSize   left -  $leftBlockOffset  right - $rightBlockOffset");
+    debugPrint("clip size : $size");
+    debugPrint("clip inner var : size- $slideBlockSize   left -  $leftBlockOffset  right - $rightBlockOffset");
     var path = Path();
     if(slideBlockSize == null || leftBlockOffset == null || rightBlockOffset == null){
       path.moveTo(0, 0);
@@ -28,13 +28,13 @@ class ChartClipPath extends CustomClipper<Path>{
 
     //滑块和表为不同层，需要额外计算slideBlockSize.width * ratio
     //起始点
-    path.moveTo(leftBlockOffset - slideBlockSize.width * ratio, 0);
+    path.moveTo(leftBlockOffset.dx - slideBlockSize.width * ratio, 0);
     //向下
-    path.lineTo(leftBlockOffset - slideBlockSize.width * ratio, chartHeight);
+    path.lineTo(leftBlockOffset.dx - slideBlockSize.width * ratio, leftBlockOffset.dy);
     //向右
-    path.lineTo(rightBlockOffset - slideBlockSize.width * ratio, chartHeight);
+    path.lineTo(rightBlockOffset.dx - slideBlockSize.width * ratio, rightBlockOffset.dy);
     //向上
-    path.lineTo(rightBlockOffset - slideBlockSize.width * ratio, 0);
+    path.lineTo(rightBlockOffset.dx - slideBlockSize.width * ratio, 0);
 
     path.close();
 

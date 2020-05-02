@@ -123,16 +123,16 @@ class DemoPageState extends State<DemoPage> {
     });
 
   }
-  double leftImageMargin = 0.0;
-  double rightImageMargin = 0.0;
+  Offset leftSlideImageOffset;
+  Offset rightSlideImageOffset ;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final double rootWidth = size.width;
+    final double rootWidth = size.width*0.95;
     final double rootHeight = size.height;
 
     return  Container(
-      color: Colors.lightBlue,
+      color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -141,28 +141,45 @@ class DemoPageState extends State<DemoPage> {
             height: rootHeight*0.5,
             child: Stack(
               children: <Widget>[
-                ///
-                //bottom chart
-                buildLineChart(),
-                //above chart
-                ClipPath(
-                  clipper: ChartClipPath(Size(30,20),//可以根据设计图也可以通过key传出来，这里方便起见
-                      leftImageMargin, rightImageMargin,rootHeight * 0.4),
-                  child: buildLineChart(),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  width: rootWidth,
+                  height: rootHeight*0.45,
+                  child: Stack(
+                    children: <Widget>[
+                      //bottom chart
+                      buildLineChart(),
+                      //above chart
+                      ClipPath(
+                        clipper: ChartClipPath(Size(30,20),//可以根据设计图也可以通过key传出来，这里方便起见
+                            leftSlideImageOffset, rightSlideImageOffset),
+                        child: buildLineChart(),
+                      ),
+                    ],
+                  ),
                 ),
-
 
                 ///
                 Positioned(
-                  bottom: 0,
+                  bottom: 10,
                   child: SliderPrice(list: beanList,rootWidth: rootWidth,rootHeight: rootHeight * 0.4,
-                    leftSlidListener: (dragging,index,leftImageMargin){
-                      debugPrint("left ------- $dragging ------- $index");
+                    leftSlidListener: (dragging,index,leftImageKey){
+                      //debugPrint("left ------- $dragging ------- $index");
+                      leftSlideImageOffset = calculateSlideBlockInfo(leftImageKey);
+                      setState(() {
+
+                      });
                     },
-                    rightSlidListener: (dragging,index,rightImageMargin){
-                      debugPrint("right ------- $dragging ------- $index");
+                    rightSlidListener: (dragging,index,rightImageKey){
+                      //debugPrint("right ------- $dragging ------- $index");
+                      rightSlideImageOffset = calculateSlideBlockInfo(rightImageKey);
+                      setState(() {
+
+                      });
                     },),
                 ),
+                ///
+
 
               ],
             ),
@@ -171,6 +188,17 @@ class DemoPageState extends State<DemoPage> {
         ],
       ),
     );
+  }
+
+  Offset calculateSlideBlockInfo(GlobalKey key){
+    if(key == null )return null;
+    RenderBox box = key.currentContext.findRenderObject();
+    Size size = box.size;
+    //debugPrint("slide block size $size");
+    Offset offset = box.localToGlobal(Offset.zero);
+    //debugPrint("slide block offset $offset");
+    //model.slideImageSize = size;
+    return offset;
   }
 
   Widget buildLineChart(){
