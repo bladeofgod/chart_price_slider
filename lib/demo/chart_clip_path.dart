@@ -10,7 +10,7 @@ class ChartClipPath extends CustomClipper<Path>{
   ChartClipPath(this.slideBlockSize, this.leftBlockOffset,
       this.rightBlockOffset);
 
-  final double ratio =0.5;
+  final double ratio =0.45;
 
   @override
   Path getClip(Size size) {
