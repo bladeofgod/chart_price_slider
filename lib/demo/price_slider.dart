@@ -193,7 +193,7 @@ class SliderPriceState extends State<SliderPrice> {
                   }
                   setState(() {});// 刷新UI
                   if(widget.leftSlidListener != null){
-                    widget.leftSlidListener(true,leftImageCurrentIndex);
+                    widget.leftSlidListener(true,leftImageCurrentIndex,leftImageMargin);
                   }
                 },
                 ///拖拽结束
@@ -228,10 +228,10 @@ class SliderPriceState extends State<SliderPrice> {
                   leftBlackLineW = leftImageMargin + blockSize;
 
                   //print('选中第$_leftImageCurrentIndex个');
-                  //setState(() {});// 刷新UI
+                  setState(() {});// 刷新UI
 
                   if(widget.leftSlidListener != null){
-                    widget.leftSlidListener(false,leftImageCurrentIndex);
+                    widget.leftSlidListener(false,leftImageCurrentIndex,leftImageMargin);
                   }
                 },
               ),
@@ -313,7 +313,7 @@ class SliderPriceState extends State<SliderPrice> {
                   }
                   setState(() {}); // 刷新UI
                   if(widget.rightSlidListener != null){
-                    widget.rightSlidListener(true,rightImageCurrentIndex);
+                    widget.rightSlidListener(true,rightImageCurrentIndex,rightImageMargin);
                   }
                 },
                 onHorizontalDragEnd: (DragEndDetails details){
@@ -346,10 +346,10 @@ class SliderPriceState extends State<SliderPrice> {
                   //解决快速滑动时，导致的横线溢出问题
                   rightBlackLineW = rightImageMargin  +blockSize;
                   //print('选中第$_rightImageCurrentIndex个');
-                  //setState(() {});// 刷新UI
+                  setState(() {});// 刷新UI
 
                   if(widget.rightSlidListener != null){
-                    widget.rightSlidListener(false,rightImageCurrentIndex);
+                    widget.rightSlidListener(false,rightImageCurrentIndex,rightImageMargin);
                   }
                 },
               ),

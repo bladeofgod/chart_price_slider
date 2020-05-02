@@ -1,3 +1,4 @@
+import 'package:chart_price_slider/demo/demo_page.dart';
 import 'package:chart_price_slider/demo/generator.dart';
 import 'package:flutter/material.dart';
 
@@ -24,28 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Builder(
-        builder: (ctx){
-          final size = MediaQuery.of(ctx).size;
-          final double rootWidth = size.width;
-          final double rootHeight = size.height;
-          return Container(
-            color: Colors.lightBlue,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SliderPrice(list: beanList,rootWidth: rootWidth,rootHeight: rootHeight * 0.4,
-                  leftSlidListener: (dragging,index){
-                    debugPrint("left ------- $dragging ------- $index");
-                  },
-                  rightSlidListener: (dragging,index){
-                    debugPrint("right ------- $dragging ------- $index");
-                  },)
-              ],
-            ),
-          );
-        },
-      ),
+      home: DemoPage(),
     );
   }
 }
