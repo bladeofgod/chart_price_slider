@@ -210,33 +210,32 @@ class SliderPriceState extends State<SliderPrice> {
                   for(int i = 0; i< widget.list.length;i++){
                     if(_leftImageMarginFlag < singleW * (0.5 + i)){
                       if(i == 0){
-
                         leftImageMargin = 0;
                       }else{
-                        model.setLeftImageM(singleW * i + 5);
+
+                        leftImageMargin = singleW * i;
 
                       }
-                      model.setLeftPriceTag(widget.list[i].x);
-                      //_leftImageCurrentIndex = i;
-                      model.setLeftImageCIndex(i);
+                      _leftPrice = widget.list[i].x;
+                      leftImageCurrentIndex = i;
                       break;
                     }
                   }
-                  //解决快速滑动时，导致的横线溢出问题  getWidthPx(30)约为滑块的一半
-                  model.setLeftBlackLW(model.leftImageMargin + getWidthPx(30));
+                  //解决快速滑动时，导致的横线溢出问题
+                  leftBlackLineW = leftImageMargin + blockSize;
 
                   //print('选中第$_leftImageCurrentIndex个');
                   //setState(() {});// 刷新UI
 
                   if(widget.leftSlidListener != null){
-                    widget.leftSlidListener(false,model.leftImageCurrentIndex);
+                    widget.leftSlidListener(false,leftImageCurrentIndex);
                   }
                 },
               ),
 
               Container(
-                padding:  EdgeInsets.only(top: getHeightPx(13)),
-                child: Text("${model.leftPrice}",style: TextStyle(fontSize: 12,
+                padding:  EdgeInsets.only(top: 6),
+                child: Text(_leftPrice,style: TextStyle(fontSize: 12,
                     color:!isLeftDragging ? Colors.black : Colors.white),),
               )
 
@@ -257,9 +256,9 @@ class SliderPriceState extends State<SliderPrice> {
       * 右边image滑块，使用到：_imageItem
       * */
   _rightImageBlock(BuildContext context, double screenWidth) {
-    double singleW = (screenWidth)/segmentPart;
+
     return Positioned(
-      right: model.rightImageMargin-5,
+      right: rightImageMargin,
       //top: 0,
       child: Stack(
         alignment: AlignmentDirectional.bottomCenter,
@@ -271,100 +270,84 @@ class SliderPriceState extends State<SliderPrice> {
             children: <Widget>[
               Visibility(
                 visible: isRightDragging,
-                child: Text("${model.rightPrice}",style: TextStyle(fontSize: 12,color: Colors.black),),
+                child: Text(_rightPrice,style: TextStyle(fontSize: 12,color: Colors.black),),
               ),
 
-              Visibility(
-                visible: isRightDragging,
-                child: Container(
-                  width: getHeightPx(1),
-                  height: getHeightPx(110),
-                  color: Colors.transparent,
-                ),
-              ),
               GestureDetector(
-                child: _imageItem(model.rightKey),
+                child: _imageItem(rightImageKey),
                 //水平方向移动
                 onHorizontalDragUpdate: (DragUpdateDetails details) {
                   ///  details.delta.direction > 0 向左滑  、小于=0 向右滑动
                   //print("right direction ____ ${details.delta.direction}");
                   isRightDragging = true;
                   //print(_rightImageMargin);
-                  if(model.rightImageMargin < 0) {//处理右边边界
-                    //_rightImageMargin = 0;
-                    model.setRightImageM(0);
-                    //_rightBlackLineW = 2;
-                    model.setRightBlackLW(2);
+                  if(rightImageMargin < 0) {//处理右边边界
+
+                    rightImageMargin = 0;
+                    ///确保不溢出
+                    rightBlackLineW = 2;
                   } else
                     //这里进行两滑块相遇处理，如果小于等于5个步长，则不允许继续向右滑动 PS:下方注释的是处理单个步长的
                   if(details.delta.direction >0 &&
-                      ((screenWidth-(model.rightImageMargin+30))-(model.leftImageMargin+30))<(singleW*5)){
+                      ((screenWidth-(rightImageMargin+blockSize))-(leftImageMargin+blockSize))
+                          <(singleW*minimumDistance)){
                     return;
                   }
-//                    if(((screenWidth-(model.rightImageMargin+30))-(model.leftImageMargin+30))<(singleW-45)) { // 处理两球相遇情况
-//                    //_rightImageMargin = screenWidth-(_leftImageMargin+15+singleW);
-//                    model.setRightImageM(screenWidth-(model.leftImageMargin+15+singleW));
-//                    //_rightBlackLineW = model.rightImageMargin;
-//                    model.setRightBlackLW(model.rightImageMargin);
-//                  }
+
                   else {
-                    //_rightImageMargin -= details.delta.dx;
-                    model.setRightImageM(model.rightImageMargin - details.delta.dx);
-                    //_rightBlackLineW = model.rightImageMargin-20 >= 0 ? model.rightImageMargin : 2;
-                    model.setRightBlackLW(model.rightImageMargin-20 >= 0 ? model.rightImageMargin : 2);
+
+                    rightImageMargin = rightImageMargin - details.delta.dx;
+                    rightBlackLineW = rightImageMargin-blockSize >= 0 ? rightImageMargin : 2;
                   }
-                  //double singleW = (screenWidth-40)/segmentPart;
-                  double _rightImageMarginFlag = model.rightImageMargin;
+                  double _rightImageMarginFlag = rightImageMargin;
                   //print('拖拽结束');
                   for(int i = 0; i< widget.list.length;i++){
                     if(_rightImageMarginFlag < singleW * (0.5 + i)){
-                      model.setRightPriceTag(widget.list[(widget.list.length - 1) -i].x);
-                      //_rightImageCurrentIndex = i;
-                      model.setRightImageCIndex(i);
+
+                      _rightPrice = widget.list[(widget.list.length - 1) -i].x;
+                      rightImageCurrentIndex = i;
                       break;
                     }
                   }
                   setState(() {}); // 刷新UI
                   if(widget.rightSlidListener != null){
-                    widget.rightSlidListener(true,model.rightImageCurrentIndex);
+                    widget.rightSlidListener(true,rightImageCurrentIndex);
                   }
                 },
                 onHorizontalDragEnd: (DragEndDetails details){
-                  double singleW = (screenWidth)/segmentPart;
+
                   isRightDragging = false;
-                  if(((screenWidth-(model.rightImageMargin+30))-(model.leftImageMargin+30))<(singleW*5)){
+                  if(((screenWidth-(rightImageMargin+blockSize))-(leftImageMargin+blockSize))<(singleW*minimumDistance)){
                     setState(() {
 
                     });
                     return;
                   }
 
-                  double _rightImageMarginFlag = model.rightImageMargin;
+                  double _rightImageMarginFlag = rightImageMargin;
                   //print('拖拽结束');
                   for(int i = 0; i< widget.list.length;i++){
                     if(_rightImageMarginFlag < singleW * (0.5 + i)){
                       if(i == 0){
-                        //_rightImageMargin = 0;
-                        model.setRightImageM(0);
+                        rightImageMargin = 0;
 
                       }else{
-                        //_rightImageMargin = singleW * i + 5;
-                        model.setRightImageM(singleW * i + 5);
+                        rightImageMargin = singleW * i;
                       }
-                      model.setRightPriceTag(widget.list[(widget.list.length - 1) -i].x);
-                      //_rightImageCurrentIndex = i;
-                      model.setRightImageCIndex(i);
+                      _rightPrice = widget.list[(widget.list.length - 1) -i].x;
+
+                      rightImageCurrentIndex = i;
                       break;
                     }
                   }
 
-                  //解决快速滑动时，导致的横线溢出问题  getWidthPx(30)约为滑块的一半
-                  model.setRightBlackLW(model.rightImageMargin + getWidthPx(20));
+                  //解决快速滑动时，导致的横线溢出问题
+                  rightBlackLineW = rightImageMargin  +blockSize;
                   //print('选中第$_rightImageCurrentIndex个');
                   //setState(() {});// 刷新UI
 
                   if(widget.rightSlidListener != null){
-                    widget.rightSlidListener(false,model.rightImageCurrentIndex);
+                    widget.rightSlidListener(false,rightImageCurrentIndex);
                   }
                 },
               ),
@@ -373,8 +356,8 @@ class SliderPriceState extends State<SliderPrice> {
 //                child: Text("$_rightPrice",style: TextStyle(fontSize: 12,color: Colors.black),),
 //              ),
               Container(
-                padding:  EdgeInsets.only(top: getHeightPx(13)),
-                child: Text("${model.rightPrice}",style: TextStyle(fontSize: 12,
+                padding:  EdgeInsets.only(top: 6),
+                child: Text(_rightPrice,style: TextStyle(fontSize: 12,
                     color:!isRightDragging ? Colors.black : Colors.white),),
               ),
 
@@ -404,38 +387,15 @@ class SliderPriceState extends State<SliderPrice> {
               height: 5.0,
               width: screenWidth,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(left: getWidthPx(20)),
-              padding: EdgeInsets.only(left: model.leftBlackLineW,right: model.rightBlackLineW),
+              //margin: EdgeInsets.only(left: blockSize / 2),
+              padding: EdgeInsets.only(left: leftBlackLineW,right: rightBlackLineW),
               child: Container(
                 color: Colors.black,
-                height: getHeightPx(5),
+                height: 3,
                 width: screenWidth ,
               ),
             ),
-//            Positioned(// 左边黑色竖线
-//                left: 0,
-//                top: 13,
-//                child:Container(
-//                  height: 4,
-//                  width: _leftBlackLineW,
-//                  decoration: BoxDecoration(
-//                      color: Colors.white,
-//                      border: Border(left: BorderSide(color: Colors.black, width: 1), top: BorderSide(color: Colors.black, width: 1), bottom: BorderSide(color: Colors.black, width: 1))
-//                  ),
-//                )
-//            ),
-//            Positioned(// 右边黑色竖线
-//                right: 0,
-//                top: 13,
-//                child:Container(
-//                  height: 4,
-//                  width: _rightBlackLineW,
-//                  decoration: BoxDecoration(
-//                      color: Colors.white,
-//                      border: Border(right: BorderSide(color: Colors.black, width: 1), top: BorderSide(color: Colors.black, width: 1), bottom: BorderSide(color: Colors.black, width: 1))
-//                  ),
-//                )
-//            ),
+
           ],
         ),
       ],

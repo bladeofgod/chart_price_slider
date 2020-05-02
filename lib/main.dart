@@ -1,3 +1,4 @@
+import 'package:chart_price_slider/demo/generator.dart';
 import 'package:flutter/material.dart';
 
 import 'demo/price_slider.dart';
@@ -8,6 +9,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final double rootWidth = MediaQuery.of(context).size.width;
+    final double rootHeight = MediaQuery.of(context).size.height;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -22,7 +25,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: SliderPrice(),
+      home: SliderPrice(list: beanList,rootHeight: rootHeight,rootWidth: rootWidth,
+        leftSlidListener: (dragging,index){
+        debugPrint("left ------- $dragging ------- $index");
+        },
+        rightSlidListener: (dragging,index){
+          debugPrint("right ------- $dragging ------- $index");
+        },),
     );
   }
 }
