@@ -36,20 +36,56 @@ class PaintChartState extends State<PaintChart> {
             /// 绘制顺序依次是 painter  ,  child  ,foregroundPainter 后者会覆盖前者
             painter: buildPainter(),
             //foregroundPainter: ,
-            child: Container(
-              width: size.width,
-              height: size.height,
-              color: Colors.white,
-            ),
+//            child: Container(
+//              width: size.width,
+//              height: size.height,
+//              color: Colors.white,
+//            ),
           ),
+          SizedBox(
+            height: 30,
+          ),
+          RangeSlider(
+              values: RangeValues(leftValue,rightValue),
+              divisions: 100,
+              min: 0.0,
+              max: 1.0,
+              onChanged: (values){
+                debugPrint("range value : $values");
+                leftValue = values.start;
+                rightValue = values.end;
+                setState(() {
+
+                });
+              })
         ],
       ),
     );
   }
 
   ChartPainter buildPainter(){
+    var dataList = [
+      ChartBean(x: "\$2000", y: 32),
+      ChartBean(x: "\$1100", y: 48),
+      ChartBean(x: "\$1400", y: 32),
+      ChartBean(x: "\$500", y: 24),
+      ChartBean(x: "\$800", y: 50),
+      ChartBean(x: "\$1800", y: 25),
+      ChartBean(x: "\$1200", y: 18),
+      ChartBean(x: "\$2000", y: 32),
+      ChartBean(x: "\$1100", y: 48),
+      ChartBean(x: "\$1400", y: 32),
+    ];
     return ChartPainter(
       leftStart: leftValue,rightEnd: rightValue,
+      chartBeans: dataList,
+      lineColor: Colors.blueAccent,
+      fillColors: [
+        Colors.orange.withOpacity(0.8),
+        Colors.orangeAccent.withOpacity(0.5)
+      ],
+      lineWith: 3,
+      yAxisNum: dataList.length
     );
   }
 
