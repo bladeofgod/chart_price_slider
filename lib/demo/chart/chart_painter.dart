@@ -98,7 +98,7 @@ class ChartPainter extends CustomPainter{
     initBorder(size);
     initPath(size);
   }
-  //key : X轴的值， value:Y轴所在屏幕的位置
+  //key : X轴的值， value:Y轴所在屏幕的位置，可以用于点击交互功能
   Map<double, Offset> _points = new Map();
 
   //生成绘制路径
