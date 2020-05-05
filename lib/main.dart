@@ -1,5 +1,6 @@
 import 'package:chart_price_slider/demo/demo_page.dart';
 import 'package:chart_price_slider/demo/generator.dart';
+import 'package:chart_price_slider/guide_page.dart';
 import 'package:flutter/material.dart';
 
 import 'demo/price_slider.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: DemoPage(),
+      home: GuidePage(),
     );
   }
 }
